@@ -6,14 +6,10 @@
 }
 
 <h1>Index</h1>
-@{
-    if (User.IsInRole("Administrator"))
-    {
-        <p>
-        <a asp-action="Create">Create New</a>
-        </p>
-    }
-}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -47,17 +43,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ArrivalDateTime)
             </td>
-                @{
-                    if (User.IsInRole("Administrator"))
-                    {<td>
-                        <a asp-action="Edit" asp-route-id="@item.FlightNumber">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.FlightNumber">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.FlightNumber">Delete</a>
-                        </td>
-                    }
-                 }
-                         
-            }
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FlightId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FlightId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FlightId">Delete</a>
+            </td>
         </tr>
 }
     </tbody>

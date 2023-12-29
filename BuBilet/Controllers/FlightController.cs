@@ -36,7 +36,7 @@ namespace BuBilet.Controllers
             }
 
             var flight = await _context.Flight
-                .FirstOrDefaultAsync(m => m.FlightNumber == id);
+                .FirstOrDefaultAsync(m => m.FlightId == id);
             if (flight == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace BuBilet.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FlightNumber,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
+        public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
         {
             if (ModelState.IsValid)
             {
@@ -88,9 +88,9 @@ namespace BuBilet.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FlightNumber,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
+        public async Task<IActionResult> Edit(string id, [Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
         {
-            if (id != flight.FlightNumber)
+            if (id != flight.FlightId)
             {
                 return NotFound();
             }
@@ -104,7 +104,7 @@ namespace BuBilet.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FlightExists(flight.FlightNumber))
+                    if (!FlightExists(flight.FlightId))
                     {
                         return NotFound();
                     }
@@ -127,7 +127,7 @@ namespace BuBilet.Controllers
             }
 
             var flight = await _context.Flight
-                .FirstOrDefaultAsync(m => m.FlightNumber == id);
+                .FirstOrDefaultAsync(m => m.FlightId == id);
             if (flight == null)
             {
                 return NotFound();
@@ -157,7 +157,7 @@ namespace BuBilet.Controllers
 
         private bool FlightExists(string id)
         {
-          return (_context.Flight?.Any(e => e.FlightNumber == id)).GetValueOrDefault();
+          return (_context.Flight?.Any(e => e.FlightId == id)).GetValueOrDefault();
         }
     }
 }

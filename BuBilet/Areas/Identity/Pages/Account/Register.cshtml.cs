@@ -12,13 +12,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using BuBilet.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using BuBilet.Areas.Identity.Data;
 
 namespace BuBilet.Areas.Identity.Pages.Account
 {
@@ -71,16 +71,7 @@ namespace BuBilet.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            [StringLength(255, ErrorMessage = "Ad En fazla 255 karaktere sahip olabilir")]
-            [Display(Name ="Firstname")]
-            public string FirstName { get; set; }
-
-            [Required]
-            [StringLength(255, ErrorMessage = "Soyad En fazla 255 karaktere sahip olabilir")]
-            [Display(Name = "Lastname")]
-            public string LastName { get; set; }
-
+           
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -125,8 +116,7 @@ namespace BuBilet.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
+                
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);

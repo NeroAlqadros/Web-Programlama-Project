@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;
 
-namespace BuBilet.Controllers
+namespace BuBilet.Areas.Identity.Data
 {
     public class RoleController : Controller
     { 

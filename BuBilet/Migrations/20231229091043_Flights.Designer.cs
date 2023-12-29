@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuBilet.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231228115950_flights")]
-    partial class flights
+    [Migration("20231229091043_Flights")]
+    partial class Flights
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,16 +42,6 @@ namespace BuBilet.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -129,6 +119,7 @@ namespace BuBilet.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FlightNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsAvailable")
@@ -139,6 +130,26 @@ namespace BuBilet.Migrations
                     b.HasIndex("FlightNumber");
 
                     b.ToTable("Seat");
+                });
+
+            modelBuilder.Entity("BuBilet.Models.Ticket", b =>
+                {
+                    b.Property<string>("TicketNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FlightNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TicketNumber");
+
+                    b.HasIndex("FlightNumber");
+
+                    b.ToTable("Ticket");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -280,9 +291,24 @@ namespace BuBilet.Migrations
 
             modelBuilder.Entity("BuBilet.Models.Seat", b =>
                 {
-                    b.HasOne("BuBilet.Models.Flight", null)
+                    b.HasOne("BuBilet.Models.Flight", "Flight")
                         .WithMany("Seats")
-                        .HasForeignKey("FlightNumber");
+                        .HasForeignKey("FlightNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flight");
+                });
+
+            modelBuilder.Entity("BuBilet.Models.Ticket", b =>
+                {
+                    b.HasOne("BuBilet.Models.Flight", "Flight")
+                        .WithMany()
+                        .HasForeignKey("FlightNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flight");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

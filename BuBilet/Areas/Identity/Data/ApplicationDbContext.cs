@@ -1,5 +1,4 @@
-﻿using BuBilet.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,12 +8,16 @@ namespace BuBilet.Areas.Identity.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-  
+
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
+    public DbSet<Flight>? Flight { get; set; }
+    //public DbSet<Seat>? Seat{ get; set; }
+    public DbSet<Ticket>? Ticket { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -26,15 +29,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.ApplyConfiguration(new ApplicationUserentityConfiguration());
     }
 
-    public DbSet<BuBilet.Models.Flight>? Flight { get; set; }
+
 }
 
 public class ApplicationUserentityConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
     void IEntityTypeConfiguration<ApplicationUser>.Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        builder.Property(U => U.FirstName).HasMaxLength(255);
-        builder.Property(U => U.LastName).HasMaxLength(255);
 
 
     }
