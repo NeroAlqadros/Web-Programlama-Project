@@ -62,9 +62,31 @@ namespace BuBilet.Controllers
             {
                 _context.Add(flight);
                 await _context.SaveChangesAsync();
+                var seats = GenerateSeats(flight.FlightId);
+                await _context.Seat.AddRangeAsync(seats);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(flight);
+        }
+        public List<Seat> GenerateSeats(string flightId)
+        {
+            List<Seat> seats = new List<Seat>();
+
+            for (int i = 1; i <= 60; i++)
+            {
+                Seat seat = new Seat
+                {
+                    FlightId = flightId,
+                    SeatNumber = i.ToString(),
+                    IsAvailable = true
+                };
+
+                seats.Add(seat);
+            }
+
+            return seats;
         }
 
         // GET: Flight/Edit/5

@@ -15,7 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
     public DbSet<Flight>? Flight { get; set; }
-    //public DbSet<Seat>? Seat{ get; set; }
+    public DbSet<Seat>? Seat{ get; set; }
     public DbSet<Ticket>? Ticket { get; set; }
     
 

@@ -19,7 +19,7 @@ namespace BuBilet.Models
         public DateTime ArrivalDateTime { get; set; }
 
 
-        public List<Seat> Seats { get; set; }
+        public ICollection<Seat> Seats { get; set; }
 
 
 
