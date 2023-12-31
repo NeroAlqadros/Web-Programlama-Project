@@ -13,7 +13,8 @@ namespace BuBilet.Controllers
     public class FlightController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        
+      
         public FlightController(ApplicationDbContext context)
         {
             _context = context;
@@ -56,38 +57,42 @@ namespace BuBilet.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
+        public async Task<IActionResult> Create(string flightId, string source, string destination, DateTime departureDateTime, DateTime arrivalDateTime)
         {
+            var flight = new Flight
+            {
+                FlightId = flightId,
+                Source = source,
+                Destination = destination,
+                DepartureDateTime = departureDateTime,
+                ArrivalDateTime = arrivalDateTime
+            };
+
+            // Create 60 seats with the flight's ID
+            var seats = new List<Seat>();
+            for (int i = 1; i <= 60; i++)
+            {
+                seats.Add(new Seat
+                {
+                    FlightNumber = flightId,
+                    SeatNumber = $"{i}",
+                    IsAvailable = true,
+                    Flight = flight
+                });
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(flight);
-                await _context.SaveChangesAsync();
-                var seats = GenerateSeats(flight.FlightId);
-                await _context.Seat.AddRangeAsync(seats);
-                await _context.SaveChangesAsync();
+
+                // Create a new flight
+                _context.Flight.Add(flight);
+                _context.Seat.AddRange(seats);
 
                 return RedirectToAction(nameof(Index));
             }
             return View(flight);
         }
-        public List<Seat> GenerateSeats(string flightId)
-        {
-            List<Seat> seats = new List<Seat>();
-
-            for (int i = 1; i <= 60; i++)
-            {
-                Seat seat = new Seat
-                {
-                    FlightId = flightId,
-                    SeatNumber = i.ToString(),
-                    IsAvailable = true
-                };
-
-                seats.Add(seat);
-            }
-
-            return seats;
-        }
+       
 
         // GET: Flight/Edit/5
         public async Task<IActionResult> Edit(string id)
