@@ -34,10 +34,15 @@
                         @{
                             if (User.IsInRole("Administrator"))
                             {
-                                  <li> <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">My Users</a></li>
+                                <li> <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">My Users</a></li>
+                            }
+                        }@{
+                            if (User.IsInRole("User"))
+                            {
+                                <li> <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="Index">My Tickets</a></li>
                             }
                         }
-                        <li> <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="Index">My Tickets</a></li>
+                        
                         <partial name="_LoginPartial" />
                     </ul>
                    
