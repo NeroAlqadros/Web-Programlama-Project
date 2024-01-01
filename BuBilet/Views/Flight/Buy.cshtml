@@ -1,13 +1,13 @@
 ﻿@model BuBilet.Models.Flight
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Buy";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Cancellation</h1>
+<h1>Buy</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Current Flight Information</h3>
 <div>
     <h4>Flight</h4>
     <hr />
@@ -37,10 +37,17 @@
             @Html.DisplayFor(model => model.ArrivalDateTime)
         </dd>
     </dl>
+   
+    <form class="form-inline" asp-action="Buy">
 
-    <form asp-action="Delete">
-        
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <div class="form-group">
+            <label for="SeatNumber">Please enter the seat number you want to buy</label>
+            <input type="text" class="form-control" id="SeatNumber">
+        </div>
+      
+        <input type="hidden" asp-for="FlightId" />
+       
+        <input type="submit" value="Buy" class="btn btn-primary" /> 
         <a asp-action="Index">Back to List</a>
     </form>
 </div>

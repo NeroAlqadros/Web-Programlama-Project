@@ -1,12 +1,20 @@
-﻿@model IEnumerable<BuBilet.Models.Flight> 
+﻿@model IEnumerable<BuBilet.Models.Flight>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Tickets</h1>
+<h1>Index</h1>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
 
+    }
+}
 
 <table class="table">
     <thead>
@@ -42,16 +50,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ArrivalDateTime)
                 </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.FlightId">Delete</a>
+                 
+                </td>
 
-                @{
-                    if (User.IsInRole("Administrator"))
-                    {
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.FlightId">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.FlightId">Cancel</a>
-                        </td>
-                    }
-                }
+                
 
 
             </tr>

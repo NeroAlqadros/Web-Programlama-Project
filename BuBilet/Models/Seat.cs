@@ -11,7 +11,10 @@ namespace BuBilet.Models
     public class Seat
     {
         [Key]
-        public string FlightNumber { get; set; }
+        public string SeatId { get; set; }
+
+        [ForeignKey("Flight")]
+        public string FlightId { get; set; }
 
      
         
@@ -20,7 +23,7 @@ namespace BuBilet.Models
 
         public bool IsAvailable { get; set; }
 
-        public Flight Flight { get; set; }
+        public virtual Flight Flight { get; set; }
 
     }
 }

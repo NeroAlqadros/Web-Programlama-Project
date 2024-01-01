@@ -7,14 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BuBilet.Areas.Identity.Data;
 using BuBilet.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace BuBilet.Controllers
 {
     public class FlightController : Controller
     {
         private readonly ApplicationDbContext _context;
-        
-      
+        Random random = new Random();
+
         public FlightController(ApplicationDbContext context)
         {
             _context = context;
@@ -47,6 +51,7 @@ namespace BuBilet.Controllers
         }
 
         // GET: Flight/Create
+        [Authorize("RequireAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -57,44 +62,41 @@ namespace BuBilet.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string flightId, string source, string destination, DateTime departureDateTime, DateTime arrivalDateTime)
+        public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
         {
-            var flight = new Flight
+            var flights = _context.Flight.ToList();
+            foreach (var item in flights)
             {
-                FlightId = flightId,
-                Source = source,
-                Destination = destination,
-                DepartureDateTime = departureDateTime,
-                ArrivalDateTime = arrivalDateTime
-            };
-
-            // Create 60 seats with the flight's ID
-            var seats = new List<Seat>();
-            for (int i = 1; i <= 60; i++)
-            {
-                seats.Add(new Seat
+                if (flight.FlightId == item.FlightId)
                 {
-                    FlightNumber = flightId,
-                    SeatNumber = $"{i}",
-                    IsAvailable = true,
-                    Flight = flight
-                });
+                    return View(flight);
+                }
             }
+            
 
             if (ModelState.IsValid)
             {
+                for(var i = 1; i < 60; i++)
+                {
+                    Seat seat = new Seat()
+                    {
+                        SeatId = Guid.NewGuid().ToString(),
+                        FlightId = flight.FlightId,
+                        SeatNumber = i.ToString(),
+                        IsAvailable = true
+                    };
+                    _context.Add(seat);
+                }
 
-                // Create a new flight
-                _context.Flight.Add(flight);
-                _context.Seat.AddRange(seats);
-
+                _context.Add(flight);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(flight);
         }
-       
 
         // GET: Flight/Edit/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null || _context.Flight == null)
@@ -146,6 +148,7 @@ namespace BuBilet.Controllers
         }
 
         // GET: Flight/Delete/5
+        [Authorize("RequireAdmin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null || _context.Flight == null)
@@ -173,14 +176,81 @@ namespace BuBilet.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Flight'  is null.");
             }
             var flight = await _context.Flight.FindAsync(id);
+            var seats= await _context.Seat.Where(s => s.FlightId == id).ToListAsync();
             if (flight != null)
             {
                 _context.Flight.Remove(flight);
+                foreach(var seat in seats){
+                    _context.Seat.Remove(seat);
+                }
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Buy(string id) 
+        { if (id == null || _context.Flight == null)
+            { return NotFound(); } 
+            var flight = await _context.Flight
+                .FirstOrDefaultAsync(m => m.FlightId == id); 
+            if (flight == null) 
+            { return NotFound(); }
+            await _context.SaveChangesAsync();
+            return View(flight);
+        }
+
+
+        [HttpPost, ActionName("Buy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BuyConfirmed(string id , string SeatNumber)
+        { 
+           
+
+            var flight1 =  _context.Flight.FirstOrDefault(f=> f.FlightId == id);
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var seat = _context.Seat.FirstOrDefault(s => s.FlightId == id || s.SeatNumber == SeatNumber );
+
+
+
+            if (seat.IsAvailable == false)
+            {
+                return View();
+            }
+
+           
+            
+           
+            Ticket ticket = new Ticket()
+            {
+                TicketId = Guid.NewGuid().ToString(),
+                Id = claims.Value.ToString(),
+                FlightId = id,
+                SeatId = seat.SeatId
+            
+            };
+
+            if (_context.Flight == null) 
+            { return Problem("Entity set 'ApplicationDbContext.Flight'  is null.");
+            } 
+            var flight = await _context.Flight.FindAsync(id);
+
+
+            seat.IsAvailable = false;
+             _context.Update(seat);
+            if (flight != null)
+
+               
+            { _context.Ticket.Add(ticket); 
+            } 
+            await _context.SaveChangesAsync(); 
+            return RedirectToAction(nameof(Index)); 
+        }
+
+       
 
         private bool FlightExists(string id)
         {

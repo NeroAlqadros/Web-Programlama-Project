@@ -7,11 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BuBilet.Areas.Identity.Data;
 using BuBilet.Models;
+using System.Security.Claims;
+using BuBilet.Migrations;
 
 namespace BuBilet.Controllers
 {
     public class TicketController : Controller
     {
+      
+
         private readonly ApplicationDbContext _context;
 
         public TicketController(ApplicationDbContext context)
@@ -22,110 +26,56 @@ namespace BuBilet.Controllers
         // GET: Ticket
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Ticket.Include(t => t.ApplicationUser).Include(t => t.Flight);
-            return View(await applicationDbContext.ToListAsync());
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+          
+
+            var tickets = await _context.Ticket.Where(m => m.Id == claims.Value).ToListAsync();
+
+           var flights = await _context.Flight.ToListAsync();
+            var matchingFlights = flights.Where(flight => tickets.Any(ticket => ticket.FlightId == flight.FlightId)).ToList();
+
+            
+
+
+            // var flights1 = flights.FirstOrDefault(m => m.FlightId ==ticket.FlightId);
+
+            // var flights = await _context.Flight.FirstOrDefaultAsync(m => m.FlightId == ticket.FlightId);
+
+            return View(matchingFlights);
+
+            /*
+              return _context.Ticket != null ? 
+                          View(await _context.Ticket.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Ticket'  is null.");
+            */
         }
 
         // GET: Ticket/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Ticket == null)
+            if (id == null || _context.Flight == null)
             {
                 return NotFound();
             }
 
-            var ticket = await _context.Ticket
-                .Include(t => t.ApplicationUser)
-                .Include(t => t.Flight)
-                .FirstOrDefaultAsync(m => m.TicketNumber == id);
-            if (ticket == null)
+            var flight = await _context.Flight
+                .FirstOrDefaultAsync(m => m.FlightId == id);
+            if (flight == null)
             {
                 return NotFound();
             }
 
-            return View(ticket);
+            return View(flight);
         }
 
         // GET: Ticket/Create
-        public IActionResult Create()
-        {
-            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["FlightId"] = new SelectList(_context.Flight, "FlightId", "FlightId");
-            return View();
-        }
-
-        // POST: Ticket/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketNumber,Id,FlightId")] Ticket ticket)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(ticket);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", ticket.Id);
-            ViewData["FlightId"] = new SelectList(_context.Flight, "FlightId", "FlightId", ticket.FlightId);
-            return View(ticket);
-        }
+        
 
         // GET: Ticket/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null || _context.Ticket == null)
-            {
-                return NotFound();
-            }
+     
 
-            var ticket = await _context.Ticket.FindAsync(id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
-            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", ticket.Id);
-            ViewData["FlightId"] = new SelectList(_context.Flight, "FlightId", "FlightId", ticket.FlightId);
-            return View(ticket);
-        }
-
-        // POST: Ticket/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("TicketNumber,Id,FlightId")] Ticket ticket)
-        {
-            if (id != ticket.TicketNumber)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(ticket);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TicketExists(ticket.TicketNumber))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["Id"] = new SelectList(_context.Users, "Id", "Id", ticket.Id);
-            ViewData["FlightId"] = new SelectList(_context.Flight, "FlightId", "FlightId", ticket.FlightId);
-            return View(ticket);
-        }
+      
 
         // GET: Ticket/Delete/5
         public async Task<IActionResult> Delete(string id)
@@ -135,16 +85,18 @@ namespace BuBilet.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Ticket
-                .Include(t => t.ApplicationUser)
-                .Include(t => t.Flight)
-                .FirstOrDefaultAsync(m => m.TicketNumber == id);
+            var ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.FlightId == id);
+
+            var flight = await _context.Flight
+                .FirstOrDefaultAsync(m => m.FlightId == id);
+
+
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            return View(ticket);
+            return View(flight);
         }
 
         // POST: Ticket/Delete/5
@@ -156,7 +108,15 @@ namespace BuBilet.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Ticket'  is null.");
             }
-            var ticket = await _context.Ticket.FindAsync(id);
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+
+            var ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.Id == claims.Value || m.FlightId == id);
+
+           
+
             if (ticket != null)
             {
                 _context.Ticket.Remove(ticket);
@@ -168,7 +128,7 @@ namespace BuBilet.Controllers
 
         private bool TicketExists(string id)
         {
-          return (_context.Ticket?.Any(e => e.TicketNumber == id)).GetValueOrDefault();
+          return (_context.Ticket?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -9,11 +9,16 @@ namespace BuBilet.Areas.Identity.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
 
-
+  
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
+
+    public ApplicationDbContext()
+    {
+    }
+
     public DbSet<Flight>? Flight { get; set; }
     public DbSet<Seat>? Seat{ get; set; }
     public DbSet<Ticket>? Ticket { get; set; }
@@ -29,6 +34,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.ApplyConfiguration(new ApplicationUserentityConfiguration());
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; 
+Database=BuBilet;Trusted_Connection=True;");
+    }
+
 
 }
 
@@ -36,7 +47,8 @@ public class ApplicationUserentityConfiguration : IEntityTypeConfiguration<Appli
 {
     void IEntityTypeConfiguration<ApplicationUser>.Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-
+        builder.Property(u => u.FirstName).HasMaxLength(255);
+        builder.Property(u => u.LastName).HasMaxLength(255);
 
     }
 }

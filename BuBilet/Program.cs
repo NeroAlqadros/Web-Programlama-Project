@@ -4,12 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using BuBilet.Areas.Identity.Data;
 
 using BuBilet.Core;
+using ASP.NETCoreIdentityCustom.Repositories;
+using BuBilet.Core.Repositories;
+using BuBilet.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString)
+    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
@@ -27,6 +31,8 @@ builder.Services.AddControllersWithViews();
 AddAuthorizationPolicies();
 
 #endregion
+AddScoped();
+
 
 
 var app = builder.Build();
@@ -66,4 +72,12 @@ void AddAuthorizationPolicies()
 
     });
 
+}
+
+
+void AddScoped()
+{
+    builder.Services.AddScoped<IUserRepository, UserRepository>();
+    builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

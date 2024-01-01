@@ -23,10 +23,24 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Flight" asp-action="Index">Fligths</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CallFlightApi" asp-action="Index">FlightApi</a>
+
                         </li>
+                        
+                        
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <ul class="nav navbar-nav navbar-right">
+                        
+                        @{
+                            if (User.IsInRole("Administrator"))
+                            {
+                                  <li> <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">My Users</a></li>
+                            }
+                        }
+                        <li> <a class="nav-link text-dark" asp-area="" asp-controller="Ticket" asp-action="Index">My Tickets</a></li>
+                        <partial name="_LoginPartial" />
+                    </ul>
+                   
                 </div>
             </div>
         </nav>

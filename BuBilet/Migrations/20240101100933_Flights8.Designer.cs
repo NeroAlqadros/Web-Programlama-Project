@@ -4,6 +4,7 @@ using BuBilet.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuBilet.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240101100933_Flights8")]
+    partial class Flights8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,16 +42,6 @@ namespace BuBilet.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -123,9 +115,6 @@ namespace BuBilet.Migrations
 
             modelBuilder.Entity("BuBilet.Models.Seat", b =>
                 {
-                    b.Property<string>("SeatId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("FlightId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -137,8 +126,6 @@ namespace BuBilet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SeatId");
-
                     b.HasIndex("FlightId");
 
                     b.ToTable("Seat");
@@ -146,9 +133,6 @@ namespace BuBilet.Migrations
 
             modelBuilder.Entity("BuBilet.Models.Ticket", b =>
                 {
-                    b.Property<string>("TicketId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("FlightId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -156,8 +140,6 @@ namespace BuBilet.Migrations
                     b.Property<string>("Id")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TicketId");
 
                     b.ToTable("Ticket");
                 });
