@@ -40,6 +40,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 Database=BuBilet;Trusted_Connection=True;");
     }
 
+    public DbSet<BuBilet.Models.PlaneTypes>? PlaneTypes { get; set; }
+
 
 }
 

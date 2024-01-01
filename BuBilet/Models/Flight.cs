@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BuBilet.Models
 {
@@ -20,9 +21,9 @@ namespace BuBilet.Models
         public DateTime ArrivalDateTime { get; set; }
 
 
-       
 
-
+        [ForeignKey("PlaneTypes")]
+        public string PlaneId { get; set; }
 
     }
 }

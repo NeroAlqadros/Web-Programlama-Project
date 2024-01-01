@@ -36,12 +36,26 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ArrivalDateTime)
         </dd>
+
     </dl>
    
     <form class="form-inline" asp-action="Buy">
-
+      
         <div class="form-group">
-            <label for="SeatNumber">Please enter the seat number you want to buy</label>
+
+            @{
+                if (Model.PlaneId == "1")
+                {
+                    <label for="SeatNumber">Please enter the seat number you want to buy (Every row is 8 seats)</label>
+                }
+                else{
+                    <label for="SeatNumber">Please enter the seat number you want to buy (Every row is 6 seats)</label>
+                    
+                }
+            }
+
+            
+           
             <input type="text" class="form-control" id="SeatNumber">
         </div>
       

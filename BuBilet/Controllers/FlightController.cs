@@ -62,7 +62,7 @@ namespace BuBilet.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
+        public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime,PlaneId")] Flight flight,int SeatNumber)
         {
             var flights = _context.Flight.ToList();
             foreach (var item in flights)
@@ -76,7 +76,7 @@ namespace BuBilet.Controllers
 
             if (ModelState.IsValid)
             {
-                for(var i = 1; i < 60; i++)
+                for(var i = 1; i < SeatNumber; i++)
                 {
                     Seat seat = new Seat()
                     {
@@ -117,7 +117,7 @@ namespace BuBilet.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime")] Flight flight)
+        public async Task<IActionResult> Edit(string id, [Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime,PlaneId")] Flight flight)
         {
             if (id != flight.FlightId)
             {
@@ -197,6 +197,7 @@ namespace BuBilet.Controllers
             if (flight == null) 
             { return NotFound(); }
             await _context.SaveChangesAsync();
+           
             return View(flight);
         }
 
