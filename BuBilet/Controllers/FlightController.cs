@@ -177,11 +177,16 @@ namespace BuBilet.Controllers
             }
             var flight = await _context.Flight.FindAsync(id);
             var seats= await _context.Seat.Where(s => s.FlightId == id).ToListAsync();
+            var tickets =await _context.Ticket.Where(t => t.FlightId == id).ToListAsync();
             if (flight != null)
             {
                 _context.Flight.Remove(flight);
                 foreach(var seat in seats){
                     _context.Seat.Remove(seat);
+                }
+                foreach (var ticket in tickets)
+                {
+                    _context.Ticket.Remove(ticket);
                 }
             }
             
