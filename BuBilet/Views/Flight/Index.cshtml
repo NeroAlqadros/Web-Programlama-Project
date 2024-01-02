@@ -1,73 +1,33 @@
-﻿@model IEnumerable<BuBilet.Models.Flight>
+﻿<h4>Search For Flights</h4>
+<hr />
+<div class="col">
+    <div class="col-md-4">
+        <form asp-action="Flights">
 
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h1>Index</h1>
-@{
-    if (User.IsInRole("Administrator"))
-    {<p>
-    <a asp-action="Create">Create New</a>
-</p>
-      
+            <div class="form-group">
+                <label name="source" class="control-label">From :
+                </label>
+                <input name="source" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="destination" class="control-label">To : 
+                </label>
+                <input name="destination" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Source)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Destination)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DepartureDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArrivalDateTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Source)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Destination)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DepartureDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArrivalDateTime)
-            </td>
-            <td>
-                <a asp-action="Buy" asp-route-id="@item.FlightId">Buy</a>
-                <a asp-action="Details" asp-route-id="@item.FlightId">Details</a>
-
-            </td>
-
-                    @{
-                        if (User.IsInRole("Administrator"))
-                        {
-                         <td>
-                           
-                            <a asp-action="Edit" asp-route-id="@item.FlightId">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@item.FlightId">Delete</a>
-
-                        </td>
-                        }
-                    }
-                
-            
-        </tr>
-}
-    </tbody>
-</table>

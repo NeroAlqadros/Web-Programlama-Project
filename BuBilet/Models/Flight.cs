@@ -23,7 +23,7 @@ namespace BuBilet.Models
 
 
         [ForeignKey("PlaneTypes")]
-        public string PlaneId { get; set; }
+        public  string PlaneId { get; set; }
 
     }
 }

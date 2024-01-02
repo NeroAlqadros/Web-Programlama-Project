@@ -27,9 +27,7 @@ namespace BuBilet.Controllers
         // GET: Flight
         public async Task<IActionResult> Index()
         {
-              return _context.Flight != null ? 
-                          View(await _context.Flight.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Flight'  is null.");
+             return View();
         }
 
         // GET: Flight/Details/5
@@ -50,6 +48,16 @@ namespace BuBilet.Controllers
             return View(flight);
         }
 
+      
+
+        public async Task<IActionResult> Flights(string source, string destination)
+        {
+
+            return View("Index", await _context.Flight.Where(f => f.Source == source || f.Destination == destination).ToListAsync());
+        }
+
+
+      
         // GET: Flight/Create
         [Authorize("RequireAdmin")]
         public IActionResult Create()
@@ -62,7 +70,7 @@ namespace BuBilet.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime,PlaneId")] Flight flight,int SeatNumber)
+        public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime,PlaneId")] Flight flight)
         {
             var flights = _context.Flight.ToList();
             foreach (var item in flights)
@@ -76,7 +84,7 @@ namespace BuBilet.Controllers
 
             if (ModelState.IsValid)
             {
-                for(var i = 1; i < SeatNumber; i++)
+                for(var i = 1; i < 72; i++)
                 {
                     Seat seat = new Seat()
                     {

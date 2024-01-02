@@ -1,0 +1,93 @@
+﻿@model IEnumerable<BuBilet.Models.Flight>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+
+    }
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Source)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Destination)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartureDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArrivalDateTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Source)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Destination)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartureDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ArrivalDateTime)
+                </td>
+                <td>
+                    <a asp-action="Buy" asp-route-id="@item.FlightId">Buy</a>
+                    <a asp-action="Details" asp-route-id="@item.FlightId">Details</a>
+
+                </td>
+
+                @{
+                    if (User.IsInRole("Administrator"))
+                    {
+                        <td>
+
+                            <a asp-action="Edit" asp-route-id="@item.FlightId">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.FlightId">Delete</a>
+
+                        </td>
+                    }
+                }
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="container">
+    <h2>Search</h2>
+   
+    <form class="form-inline" action="/action_page.php">
+        <div class="form-group">
+            <label for="Source">From :</label>
+            <input type="text" class="form-control" id="source" name="source">
+        </div>
+        <div class="form-group">
+            <label for="Destination">To :</label>
+            <input type="text" class="form-control" id="destination" name="destination">
+        </div>
+       
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+</div>
