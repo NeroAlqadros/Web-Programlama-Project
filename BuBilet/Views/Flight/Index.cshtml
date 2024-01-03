@@ -1,4 +1,8 @@
-﻿<h4>Search For Flights</h4>
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}﻿
+<h4>Search For Flights</h4>
 <hr />
 <div class="col">
     <div class="col-md-4">
@@ -6,25 +10,32 @@
 
 
             <div class="form-group">
-                <label name="source" class="control-label">From :
+                <label name="source" class="control-label">
+                    From :
                 </label>
                 <input name="source" class="form-control" />
             </div>
             <div class="form-group">
-                <label name="destination" class="control-label">To : 
+                <label name="destination" class="control-label">
+                    To :
                 </label>
                 <input name="destination" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label name="departureTime" class="control-label">
+                    Departure
+                </label>
+                <input type="date" name="departureTime" class="form-control" />
             </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+           
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{
