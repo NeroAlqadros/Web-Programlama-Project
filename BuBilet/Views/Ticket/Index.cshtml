@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BuBilet.Models.Flight> 
+﻿@model IEnumerable<BuBilet.Models.Ticket> 
 
 @{
     ViewData["Title"] = "Index";
@@ -12,17 +12,21 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Source)
+                @Html.DisplayNameFor(model => model.Flight.Source)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Destination)
+                @Html.DisplayNameFor(model => model.Flight.Destination)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DepartureDateTime)
+                @Html.DisplayNameFor(model => model.Flight.DepartureDateTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ArrivalDateTime)
+                @Html.DisplayNameFor(model => model.Flight.ArrivalDateTime)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeatNumber)
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -31,24 +35,28 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Source)
+                    @Html.DisplayFor(modelItem => item.Flight.Source)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Destination)
+                    @Html.DisplayFor(modelItem => item.Flight.Destination)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DepartureDateTime)
+                    @Html.DisplayFor(modelItem => item.Flight.DepartureDateTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ArrivalDateTime)
+                    @Html.DisplayFor(modelItem => item.Flight.ArrivalDateTime)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SeatNumber)
+                </td>
+
 
                 @{
                     if (User.IsInRole("Administrator"))
                     {
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.FlightId">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.FlightId">Cancel</a>
+                            <a asp-action="Details" asp-route-id="@item.TicketId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.TicketId">Cancel</a>
                         </td>
                     }
                 }

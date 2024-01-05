@@ -15,13 +15,12 @@ namespace BuBilet.Models
         [ForeignKey("ApplicationUser")]
         public string Id { get; set; }
 
-      
 
-        [ForeignKey("Flight")]
-        public string FlightId { get; set; }
+        public string  FlightId { get; set; }
+        public  virtual Flight? Flight { get; set; }
 
-        [ForeignKey("Seat")]
-        public string SeatId { get; set; }
+        public string SeatNumber { get; set; }
+
 
 
 

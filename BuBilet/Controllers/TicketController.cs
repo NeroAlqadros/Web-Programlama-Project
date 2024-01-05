@@ -32,17 +32,23 @@ namespace BuBilet.Controllers
 
             var tickets = await _context.Ticket.Where(m => m.Id == claims.Value).ToListAsync();
 
-           var flights = await _context.Flight.ToListAsync();
-            var matchingFlights = flights.Where(flight => tickets.Any(ticket => ticket.FlightId == flight.FlightId)).ToList();
 
-            
+            foreach (var item in tickets)
+            {
+               item.Flight = await _context.Flight.Where(f => f.FlightId == item.FlightId).FirstOrDefaultAsync();
+            }
+
+            // var flights = await _context.Flight.ToListAsync();
+            // var matchingFlights = flights.Where(flight => tickets.Any(ticket => ticket.FlightId == flight.FlightId)).ToList();
+
+
 
 
             // var flights1 = flights.FirstOrDefault(m => m.FlightId ==ticket.FlightId);
 
             // var flights = await _context.Flight.FirstOrDefaultAsync(m => m.FlightId == ticket.FlightId);
 
-            return View(matchingFlights);
+            return View(tickets);
 
             /*
               return _context.Ticket != null ? 
@@ -59,14 +65,15 @@ namespace BuBilet.Controllers
                 return NotFound();
             }
 
-            var flight = await _context.Flight
-                .FirstOrDefaultAsync(m => m.FlightId == id);
-            if (flight == null)
+            var ticket = await _context.Ticket.FirstOrDefaultAsync(t => t.TicketId == id);
+           // var flight = await _context.Flight.FirstOrDefaultAsync(m => m.FlightId == id);
+           ticket.Flight = await _context.Flight.FirstOrDefaultAsync(f=> f.FlightId == ticket.FlightId);
+            if (ticket == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return View(ticket);
         }
 
         // GET: Ticket/Create
@@ -85,10 +92,10 @@ namespace BuBilet.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.FlightId == id);
+            var ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.TicketId == id);
 
-            var flight = await _context.Flight
-                .FirstOrDefaultAsync(m => m.FlightId == id);
+
+            ticket.Flight = await _context.Flight.FirstOrDefaultAsync(f => f.FlightId == ticket.FlightId);
 
 
             if (ticket == null)
@@ -96,7 +103,7 @@ namespace BuBilet.Controllers
                 return NotFound();
             }
 
-            return View(flight);
+            return View(ticket);
         }
 
         // POST: Ticket/Delete/5
@@ -113,7 +120,7 @@ namespace BuBilet.Controllers
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
 
-            var ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.Id == claims.Value || m.FlightId == id);
+            var ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.Id == claims.Value && m.TicketId == id);
 
            
 

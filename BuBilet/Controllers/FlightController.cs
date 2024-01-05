@@ -72,15 +72,7 @@ namespace BuBilet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FlightId,Source,Destination,DepartureDateTime,ArrivalDateTime,PlaneId")] Flight flight)
         {
-            var flights = _context.Flight.ToList();
-            foreach (var item in flights)
-            {
-                if (flight.FlightId == item.FlightId)
-                {
-                    return View(flight);
-                }
-            }
-            
+           
 
             if (ModelState.IsValid)
             {
@@ -93,10 +85,10 @@ namespace BuBilet.Controllers
                         SeatNumber = i.ToString(),
                         IsAvailable = true
                     };
-                    _context.Add(seat);
+                    _context.Seat.Add(seat);
                 }
 
-                _context.Add(flight);
+                _context.Flight.Add(flight);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -185,7 +177,7 @@ namespace BuBilet.Controllers
             }
             var flight = await _context.Flight.FindAsync(id);
             var seats= await _context.Seat.Where(s => s.FlightId == id).ToListAsync();
-            var tickets =await _context.Ticket.Where(t => t.FlightId == id).ToListAsync();
+            var tickets =await _context.Ticket.Where(t => t.Flight.FlightId == id).ToListAsync();
             if (flight != null)
             {
                 _context.Flight.Remove(flight);
@@ -209,7 +201,7 @@ namespace BuBilet.Controllers
                 .FirstOrDefaultAsync(m => m.FlightId == id); 
             if (flight == null) 
             { return NotFound(); }
-            await _context.SaveChangesAsync();
+            
            
             return View(flight);
         }
@@ -217,34 +209,29 @@ namespace BuBilet.Controllers
 
         [HttpPost, ActionName("Buy")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> BuyConfirmed(string id , string SeatNumber)
+        public async Task<IActionResult> BuyConfirmed(string id  , string SeatNumber)
         { 
            
 
-            var flight1 =  _context.Flight.FirstOrDefault(f=> f.FlightId == id);
+            var flight1 = await _context.Flight.FirstOrDefaultAsync(f=> f.FlightId == id);
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
+
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var seat = _context.Seat.FirstOrDefault(s => s.FlightId == id || s.SeatNumber == SeatNumber );
-
-
-
+            Seat seat = await _context.Seat.FirstOrDefaultAsync(s => s.FlightId == id && s.SeatNumber == SeatNumber);                
+         
             if (seat.IsAvailable == false)
             {
                 return View();
             }
-
-           
-            
-           
+                      
             Ticket ticket = new Ticket()
             {
                 TicketId = Guid.NewGuid().ToString(),
-                Id = claims.Value.ToString(),
-                FlightId = id,
-                SeatId = seat.SeatId
-            
+                Id = claims.Value.ToString(),               
+                FlightId = id,        
+                SeatNumber = SeatNumber
             };
 
             if (_context.Flight == null) 

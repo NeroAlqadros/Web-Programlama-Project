@@ -39,8 +39,9 @@
 
     </dl>
    
-    <form class="form-inline" asp-action="Buy">
-      
+    <form class="form-inline" asp-action="Buy" method="post">
+
+        <input type="hidden" asp-for="FlightId" />
         <div class="form-group">
 
             @{
@@ -54,14 +55,14 @@
                 }
             }
 
+
             
-           
-            <input type="text" class="form-control" id="SeatNumber">
+            <input type="text" class="form-control" id="SeatNumber" name="SeatNumber">
         </div>
       
-        <input type="hidden" asp-for="FlightId" />
+        
        
         <input type="submit" value="Buy" class="btn btn-primary" /> 
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Flights">Back to List</a>
     </form>
 </div>
