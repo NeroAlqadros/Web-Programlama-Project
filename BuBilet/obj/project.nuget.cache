@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FFloMgGwknBkR9eyaCXZbFJ0nsQYxdREeefTpELQhDAbxAzcf9n96XKi1EwBizeRDKqInYL39zpk0CbBSXv/tA==",
+  "dgSpecHash": "dSb7+5HcipnVI0soDqOAvWvZpaDAZJL4o3qdCt2wQkoJZ+BeLgCjWiyusMc0ykYq07+dg4pmKR4ED3LZ/viZpQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project\\BuBilet\\BuBilet.csproj",
+  "projectFilePath": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project1\\BuBilet\\BuBilet.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

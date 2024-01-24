@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BuBilet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff9cffa2b17c1fe96e632806ccf8cb5ff3aad3c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f26c9dea9edbe9cc7ba58d3728c429e8cf8454c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("BuBilet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BuBilet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

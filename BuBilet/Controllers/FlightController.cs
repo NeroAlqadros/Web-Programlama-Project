@@ -17,7 +17,7 @@ namespace BuBilet.Controllers
     public class FlightController : Controller
     {
         private readonly ApplicationDbContext _context;
-        Random random = new Random();
+        //Random random = new Random();
 
         public FlightController(ApplicationDbContext context)
         {

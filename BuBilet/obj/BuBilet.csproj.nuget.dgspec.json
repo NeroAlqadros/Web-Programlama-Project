@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project\\BuBilet\\BuBilet.csproj": {}
+    "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project1\\BuBilet\\BuBilet.csproj": {}
   },
   "projects": {
-    "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project\\BuBilet\\BuBilet.csproj": {
+    "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project1\\BuBilet\\BuBilet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project\\BuBilet\\BuBilet.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project1\\BuBilet\\BuBilet.csproj",
         "projectName": "BuBilet",
-        "projectPath": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project\\BuBilet\\BuBilet.csproj",
+        "projectPath": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project1\\BuBilet\\BuBilet.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project\\BuBilet\\obj\\",
+        "outputPath": "C:\\Users\\PC\\Source\\Repos\\Web-Programlama-Project1\\BuBilet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -88,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
