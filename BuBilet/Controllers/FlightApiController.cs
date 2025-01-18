@@ -17,6 +17,8 @@ namespace BuBilet.Controllers
         public List<Flight> Get()
         {
             var flights = db.Flight.ToList();
+
+           
             // normalde json formatına cevirip gondermem lazım  [ApiController] bunu otomatik yapıyor
             return flights;
         }

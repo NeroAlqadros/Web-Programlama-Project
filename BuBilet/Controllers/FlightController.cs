@@ -50,10 +50,17 @@ namespace BuBilet.Controllers
 
       
 
-        public async Task<IActionResult> Flights(string source, string destination, DateTime departureTime)
+        public async Task<IActionResult> Flights(string? source, string? destination, DateTime? departureTime)
         {
-
-            return View("Flights", await _context.Flight.Where(f => f.Source == source && f.Destination == destination && f.DepartureDateTime.Date == departureTime).ToListAsync());
+            if (departureTime==default)
+            {
+                 return View("Flights", await _context.Flight.Where(f => f.Source == source && f.Destination == destination ).ToListAsync());
+            }
+            else
+            {
+                return View("Flights", await _context.Flight.Where(f => f.Source == source && f.Destination == destination&& f.DepartureDateTime.Date==departureTime).ToListAsync());
+            }
+                  
         }
 
 
